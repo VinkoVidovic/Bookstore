@@ -87,6 +87,9 @@
   <ItemGroup>
     <Content Include="rhetos-app.settings.json" />
     <Content Include="rhetos-build.settings.json" />
+    <Content Include="DslScripts\Employee.rhe" />
+    <Content Include="DslScripts\Department.rhe" />
+    <Content Include="DslScripts\Topic.rhe" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

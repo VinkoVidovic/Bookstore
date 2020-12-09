@@ -1,0 +1,7 @@
+﻿Module Bookstore
+{
+	Entity Topic
+    {
+        ShortString Name { Unique; Required; }
+    }
+}

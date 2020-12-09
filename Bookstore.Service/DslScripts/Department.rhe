@@ -1,0 +1,8 @@
+﻿Module Bookstore
+{
+    Entity Department 
+    {
+        ShortString Code { Unique; Required; }
+        LongString Description;
+    }
+}
