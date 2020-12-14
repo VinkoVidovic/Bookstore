@@ -14,6 +14,30 @@
 		ItemFilter ContainsForbiddenTitle 'book => book.Title.Contains("The Theory and Practice of Oligarchical Collectivism")';
 		Lock ContainsForbiddenTitle 'Thought Police are on their way!';
 
+        ItemFilter CommonMisspelling 'book => book.Title.Contains("curiousity")';
+        InvalidData CommonMisspelling 'It is not allowed to enter misspelled word "curiousity". Please use "curiosity" instead.';
+
+        ComposableFilterBy LongBooks '(query, repository, parameter) =>
+            {
+                return query.Where(item => item.NumberOfPages >= 500);
+            }';
+
+        FilterBy ComplexSearch '(repository, parameter) =>
+        {
+            var query = repository.Bookstore.Book.Query(item => item.NumberOfPages >= parameter.MinimumPages && item.NumberOfPages <= parameter.MaximumPages);
+            if (parameter.ForeignBooksOnly == true)
+                query = query.Where(item => item.Extension_ForeignBook.ID != null);
+            if (parameter.FantasyBooksOnly == true)
+                query = query.Where(item => item.Genre.ID == Bookstore.Genre.Fantasy);
+            Book[] books = query.ToSimple().ToArray();
+
+            if (parameter.MaskTitles == true)
+                foreach (var book in books.Where(b => !string.IsNullOrEmpty(b.Title)))
+                    book.Title = book.Title.First() + "***" + book.Title.Last();
+
+            return books;
+        }';
+
         Logging { AllProperties; }
     }
 
@@ -80,4 +104,16 @@
         AutodetectSqlDependencies;
     }
 
+    Parameter LongBooks
+    {
+    }
+
+    Parameter ComplexSearch
+    {
+        Integer MinimumPages;
+        Integer MaximumPages;
+        Bool ForeignBooksOnly;
+        Bool MaskTitles;
+        Bool FantasyBooksOnly;
+    }
 }

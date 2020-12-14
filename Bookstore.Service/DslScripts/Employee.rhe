@@ -4,6 +4,7 @@
     {
         ShortString Name;
         ShortString VatNumber { Unique; }
+        Bool IsActive { DefaultValue 'item => true'; }
     }
 
     Entity Manager 
@@ -26,5 +27,24 @@
         Reference Department {Detail;}
 
         UniqueMultiple 'Employee Department';
+    }
+
+    SqlQueryable ActiveEmployeesIDs
+        "SELECT ID FROM Bookstore.ActiveEmployees"
+    {
+        SqlDependsOnView Bookstore.ActiveEmployees;
+    }
+
+    SqlView ActiveEmployees
+        "
+        SELECT
+	        employee.id
+        FROM
+	        Bookstore.Employee employee
+        WHERE
+	        employee.IsActive = 1
+        "
+    {
+        AutoDetectSqlDependencies;
     }
 }
