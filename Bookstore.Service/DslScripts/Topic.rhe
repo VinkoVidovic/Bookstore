@@ -2,6 +2,9 @@
 {
 	Entity Topic
     {
+        ShortString Code { Autocode; DenyUserEdit; }
         ShortString Name { Unique; Required; }
+
+        Deactivatable;
     }
 }

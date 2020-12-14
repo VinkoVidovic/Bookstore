@@ -9,7 +9,7 @@
     Entity Manager 
     {
         Extends Bookstore.Employee;
-        LongString Bonuses;
+        LongString Bonuses { DefaultValue 'item => "No bonuses."'; }
     }
 
     Entity EducationRecord 

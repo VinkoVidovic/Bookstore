@@ -90,6 +90,7 @@
     <Content Include="DslScripts\Employee.rhe" />
     <Content Include="DslScripts\Department.rhe" />
     <Content Include="DslScripts\Topic.rhe" />
+    <Content Include="DslScripts\Genre.rhe" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

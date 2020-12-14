@@ -2,10 +2,19 @@
 {
     Entity Book
     {
-        ShortString Code { Unique; Required; }
+        ShortString Code { Unique; Autocode; Required; }
         ShortString Title { Required; }
         Integer NumberOfPages;
         Reference Author Bookstore.Person;
+        Reference Genre Bookstore.Genre;
+
+        DateTime Created { CreationTime; }
+        DateTime UpdatedAt { ModificationTimeOf Bookstore.Book.Title; }
+
+		ItemFilter ContainsForbiddenTitle 'book => book.Title.Contains("The Theory and Practice of Oligarchical Collectivism")';
+		Lock ContainsForbiddenTitle 'Thought Police are on their way!';
+
+        Logging { AllProperties; }
     }
 
     Entity Person
@@ -43,4 +52,32 @@
 
         UniqueMultiple 'Book Topic';
     }
+
+    Browse BookGrid Bookstore.Book
+    {
+        Take Code;
+        Take Title;
+        Take 'Author.Name';
+        Take TranslatorName 'Extension_ForeignBook.Translator.Name';
+        Take NumberOfBookTopics 'Extension_BookInfo.NumberOfBookTopics';
+    }
+
+    SqlQueryable BookInfo
+        "
+            SELECT
+                b.ID,
+                NumberOfBookTopics = COUNT(c.ID)
+            FROM
+                Bookstore.Book b
+                LEFT JOIN Bookstore.BookTopic c ON c.BookID = b.ID
+            GROUP BY
+                b.ID
+        "
+    {
+        Extends Bookstore.Book;
+        Integer NumberOfBookTopics;
+
+        AutodetectSqlDependencies;
+    }
+
 }
